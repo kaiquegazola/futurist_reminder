@@ -10,17 +10,17 @@ class ProfileRepository {
 
   final ProfileProvider provider;
 
-  getProfile() {
-    return provider.getProfile();
+  Future<Profile> getProfile() async {
+    return Profile.fromJson(await provider.getProfile());
   }
 
   saveProfile(Profile profile) {
-    return provider.saveProfile(profile);
+    return provider.saveProfile(profile.toJson());
   }
 
   updateImage(List<int> imageBytes) {
     Profile profile = Get.find<Profile>();
     profile.image = base64.encode(imageBytes);
-    return provider.saveProfile(profile);
+    return provider.saveProfile(profile.toJson());
   }
 }

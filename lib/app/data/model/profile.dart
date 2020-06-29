@@ -1,7 +1,10 @@
 import 'package:futuristreminder/app/controller/profile_rx.dart';
 
 class Profile {
-  Profile({String name, String image});
+  Profile({String name, String image}) {
+    this.name = name;
+    this.image = image;
+  }
 
   final rx = ProfileRx();
 

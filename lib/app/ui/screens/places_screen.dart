@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:futuristreminder/app/data/model/place.dart';
 import 'package:futuristreminder/app/ui/widgets/future_item_list.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PlacesScreen extends StatefulWidget {
-  @override
-  _PlacesScreenState createState() => _PlacesScreenState();
-}
-
-class _PlacesScreenState extends State<PlacesScreen> {
-  var items = ['Casa', 'Trabalho', 'Mercado'];
-
+class PlacesScreen extends GetView<Place> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Container(
-          child: RaisedButton(
-            onPressed: () {},
-            child: Text("addPlace".tr),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return FutureItemList(
-              index: index,
-              text: items[index],
-              onPressed: () => Get.snackbar('Hi', 'text'),
-            );
-          },
-        ),
-      ],
+    return Obx(
+      () => Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          if (controller.places != null) ...[
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(vertical: 15.h),
+                shrinkWrap: true,
+                itemCount: controller.places.length,
+                itemBuilder: (context, index) {
+                  Place place = controller.places[index];
+                  return FutureItemList(
+                    text: place.description,
+                    onPressed: () => Get.snackbar('Hi', 'text'),
+                    place: place,
+                  );
+                },
+              ),
+            ),
+          ] else
+            Text("you dont have lembretes"),
+        ],
+      ),
     );
   }
 }

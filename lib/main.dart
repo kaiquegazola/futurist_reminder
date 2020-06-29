@@ -3,17 +3,16 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:futuristreminder/app/data/repository/profile_repository.dart';
 import 'package:futuristreminder/app/ui/lang/my_translations.dart';
 import 'package:futuristreminder/app/ui/screens/places_screen.dart';
 import 'package:futuristreminder/app/ui/theme/colors_theme.dart';
+import 'package:futuristreminder/app/ui/widgets/place_add_widget.dart';
 import 'package:futuristreminder/app/ui/widgets/profile_widget.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 
-import 'app/data/model/profile.dart';
+import 'package:futuristreminder/app/data/dependency/injection_container.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -23,13 +22,6 @@ void main() {
   );
   ScreenUtil.init(width: 768, height: 1280);
   runApp(ReminderApp());
-  Get.putAsync<GetStorage>(() async {
-    await GetStorage().initStorage;
-    return GetStorage();
-  });
-  Get.lazyPut<ProfileProvider>(() => ProfileProvider(box: Get.find()));
-  Get.lazyPut<ProfileRepository>(() => ProfileRepository(provider: Get.find()));
-  Get.lazyPut<Profile>(() => Profile());
 }
 
 class ReminderApp extends StatelessWidget {
@@ -55,13 +47,28 @@ class ReminderApp extends StatelessWidget {
         textTheme:
             GoogleFonts.anonymousProTextTheme(ThemeData.dark().textTheme),
       ),
-      home: HomeScreen(),
+      home: LoadingScreen(),
       darkTheme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color(0xff1f2f38),
         textTheme:
             GoogleFonts.anonymousProTextTheme(ThemeData.dark().textTheme),
         colorScheme:
             ThemeData.dark().colorScheme.copyWith(surface: Color(0xff1f2f38)),
+      ),
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 1), () async {
+      await init();
+      Get.to(HomeScreen());
+    });
+    return Container(
+      child: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -118,37 +125,5 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 void addBottomSheet() {
-  Get.bottomSheet(
-    Card(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 30.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Salvar novo Local'),
-            SizedBox(height: 20),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                hintText: 'description'.tr,
-                contentPadding: EdgeInsets.all(4),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              child: Text('save'.tr),
-              onPressed: () {
-                Get.back();
-                //     Geolocator()
-                // .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-              },
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+  Get.bottomSheet(PlaceAddWidget());
 }

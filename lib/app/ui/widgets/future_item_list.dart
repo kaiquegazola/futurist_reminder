@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:futuristreminder/app/data/model/place.dart';
+import 'package:futuristreminder/app/data/repository/place_repository.dart';
 import 'package:futuristreminder/app/ui/theme/colors_theme.dart';
+import 'package:get/get.dart';
 
 class FutureItemList extends StatelessWidget {
   const FutureItemList({
     Key key,
-    @required this.index,
     @required this.text,
     @required this.onPressed,
+    @required this.place,
   }) : super(key: key);
 
-  final int index;
   final String text;
   final Function onPressed;
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
@@ -20,31 +23,27 @@ class FutureItemList extends StatelessWidget {
       height: 90.h,
       child: Row(
         children: <Widget>[
-          if (index != 0)
-            Container(height: 90.h, width: 1.w, color: Colors.blue[400]),
-          Row(
-            children: <Widget>[
-              Container(height: 1, width: 20.w, color: Colors.blue[400]),
-              ClipPath(
-                clipper: Sky(),
-                child: RaisedButton(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 60.w),
-                    color: ColorsTheme.deepBlue,
-                    onPressed: onPressed,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 150.w,
-                      child: Text(
-                        text.toUpperCase(),
-                        style: TextStyle(
-                          letterSpacing: 4,
-                          fontSize: 24.ssp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )),
+          Container(height: 1, width: 20.w, color: Get.theme.accentColor),
+          ClipPath(
+            clipper: Sky(),
+            child: RaisedButton(
+              onLongPress: () {
+                Get.find<PlaceRepository>().remove(place);
+              },
+              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 60.w),
+              color: ColorsTheme.deepBlue,
+              onPressed: onPressed,
+              child: Text(
+                text.toUpperCase(),
+                style: TextStyle(
+                  letterSpacing: 4,
+                  fontSize: 24.ssp,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.clip,
               ),
-            ],
+            ),
           ),
         ],
       ),
