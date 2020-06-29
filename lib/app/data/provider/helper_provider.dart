@@ -2,38 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:futuristreminder/app/data/dependency/database_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class PlaceProvider {
+class HelperProvider {
   final DatabaseProvider dbProvider;
 
-  PlaceProvider({@required this.dbProvider});
+  HelperProvider({@required this.dbProvider});
 
-  Future<List<Map<String, dynamic>>> getPlaces() async {
+  Future<List<Map<String, dynamic>>> getHelpers() async {
     Database db = await dbProvider.database;
     final result = await db.query(
-      'Place',
+      'Helper',
     );
     return result;
   }
 
-  Future<bool> savePlace(Map<String, dynamic> value) async {
+  Future<bool> saveHelper(Map<String, dynamic> value) async {
     Database db = await dbProvider.database;
     if (value['id'] != null) {
       return await db.update(
-            'Place',
+            'Helper',
             value,
             where: 'id = ?',
             whereArgs: [value['id']].toList(),
           ) >
           0;
     } else {
-      return await db.insert('Place', value) > 0;
+      return await db.insert('Helper', value) > 0;
     }
   }
 
   Future<bool> remove(int id) async {
     Database db = await dbProvider.database;
     return await db.delete(
-          'Place',
+          'Helper',
           where: 'id = ?',
           whereArgs: [id].toList(),
         ) >

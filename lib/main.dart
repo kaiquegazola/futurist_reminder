@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:futuristreminder/app/ui/lang/my_translations.dart';
+import 'package:futuristreminder/app/ui/screens/helpers_screen.dart';
 import 'package:futuristreminder/app/ui/screens/places_screen.dart';
 import 'package:futuristreminder/app/ui/theme/colors_theme.dart';
+import 'package:futuristreminder/app/ui/widgets/helper_add_widget.dart';
 import 'package:futuristreminder/app/ui/widgets/place_add_widget.dart';
 import 'package:futuristreminder/app/ui/widgets/profile_widget.dart';
 import 'package:get/get.dart';
@@ -79,51 +81,66 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ColorsTheme.deepBlue,
-          child: Icon(
-            LineIcons.plus,
-            color: ColorsTheme.lightBlue,
-          ),
-          onPressed: () => addBottomSheet(),
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorsTheme.deepBlue,
+        child: Icon(
+          LineIcons.plus,
+          color: ColorsTheme.lightBlue,
         ),
-        body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ProfileWidget(),
-              TabBar(
-                labelPadding: EdgeInsets.symmetric(vertical: 15.h),
-                tabs: <Widget>[
-                  Text("places".tr),
-                  Text("helpers".tr),
+        onPressed: () {
+          _tabController.index == 0
+              ? addBottomSheetPlace()
+              : addBottomSheetHelper();
+        },
+      ),
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ProfileWidget(),
+            TabBar(
+              controller: _tabController,
+              labelPadding: EdgeInsets.symmetric(vertical: 15.h),
+              tabs: <Widget>[
+                Text("places".tr),
+                Text("helpers".tr),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                  PlacesScreen(),
+                  HelpersScreen(),
                 ],
               ),
-              Expanded(
-                child: TabBarView(
-                  children: <Widget>[
-                    PlacesScreen(),
-                    Text("teste"),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          bottom: false,
+            ),
+          ],
         ),
+        bottom: false,
       ),
     );
   }
 }
 
-void addBottomSheet() {
+void addBottomSheetPlace() {
   Get.bottomSheet(PlaceAddWidget());
+}
+
+void addBottomSheetHelper() {
+  Get.bottomSheet(HelperAddWidget());
 }

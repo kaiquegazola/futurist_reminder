@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:futuristreminder/app/data/model/place.dart';
+import 'package:futuristreminder/app/data/repository/place_repository.dart';
 import 'package:futuristreminder/app/ui/widgets/future_item_list.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +23,9 @@ class PlacesScreen extends GetView<Place> {
                   return FutureItemList(
                     text: place.description,
                     onPressed: () => Get.snackbar('Hi', 'text'),
-                    place: place,
+                    onLongPress: () {
+                      Get.find<PlaceRepository>().remove(place);
+                    },
                   );
                 },
               ),

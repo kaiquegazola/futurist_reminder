@@ -11,17 +11,19 @@ class MyTranslations extends Translations {
           'slogan': 'futurist reminder',
           'cropper': 'Crop Image',
           'save': 'Save',
-          'description': 'Description'
+          'description': 'Description',
+          'name': 'Name',
         },
         'pt': {
           'places': 'Locais',
-          'helpers': 'Ajuda/Atalho',
+          'helpers': 'Lembretes',
           'addImage': 'Adicionar Imagem',
           'addPlace': 'Adicionar novo local',
           'slogan': 'lembrete futurista',
           'cropper': 'Recortar Imagem',
           'save': 'Salvar',
-          'description': 'Descrição'
+          'description': 'Descrição',
+          'name': 'Nome',
         },
       };
 }

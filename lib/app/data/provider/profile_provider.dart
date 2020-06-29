@@ -11,7 +11,7 @@ class ProfileProvider {
     Database db = await dbProvider.database;
     final result =
         await db.query('Profile', where: 'id = ?', whereArgs: [1].toList());
-    return result?.first;
+    return result != null && result.isNotEmpty ? result.first : null;
   }
 
   Future<bool> saveProfile(Map<String, dynamic> value) async {

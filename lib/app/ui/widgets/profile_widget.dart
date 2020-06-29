@@ -42,13 +42,11 @@ class ProfileWidget extends GetView<Profile> {
             children: [
               Center(
                 child: Obx(
-                  () => controller.name == null
-                      ? Text("Somebody")
-                      : Text(
-                          controller.name,
-                          style: TextStyle(fontSize: 62.ssp),
-                          textAlign: TextAlign.center,
-                        ),
+                  () => Text(
+                    controller.name ?? 'Visitor',
+                    style: TextStyle(fontSize: 62.ssp),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               Text('slogan'.tr),

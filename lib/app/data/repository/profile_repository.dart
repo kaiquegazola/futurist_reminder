@@ -11,7 +11,8 @@ class ProfileRepository {
   final ProfileProvider provider;
 
   Future<Profile> getProfile() async {
-    return Profile.fromJson(await provider.getProfile());
+    final result = await provider.getProfile();
+    return result != null ? Profile.fromJson(result) : Profile();
   }
 
   saveProfile(Profile profile) {

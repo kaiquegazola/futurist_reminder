@@ -15,7 +15,7 @@ class PlaceRepository {
   }
 
   Future<bool> save(Place place) async {
-    final bool result = await provider.savePlaces(place.toJson());
+    final bool result = await provider.savePlace(place.toJson());
     place.places = await getPlaces();
     return result;
   }

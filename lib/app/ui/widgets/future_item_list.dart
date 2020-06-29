@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:futuristreminder/app/data/model/place.dart';
-import 'package:futuristreminder/app/data/repository/place_repository.dart';
 import 'package:futuristreminder/app/ui/theme/colors_theme.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +8,12 @@ class FutureItemList extends StatelessWidget {
     Key key,
     @required this.text,
     @required this.onPressed,
-    @required this.place,
+    this.onLongPress,
   }) : super(key: key);
 
   final String text;
   final Function onPressed;
-  final Place place;
+  final Function onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +25,7 @@ class FutureItemList extends StatelessWidget {
           ClipPath(
             clipper: Sky(),
             child: RaisedButton(
-              onLongPress: () {
-                Get.find<PlaceRepository>().remove(place);
-              },
+              onLongPress: onLongPress,
               padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 60.w),
               color: ColorsTheme.deepBlue,
               onPressed: onPressed,

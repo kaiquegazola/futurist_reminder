@@ -18,7 +18,7 @@ class DatabaseProvider {
       dir = join(dir, 'futurist_reminder.db');
       return await openDatabase(
         dir,
-        version: 2,
+        version: 3,
         onCreate: _onCreate,
       );
     } catch (e) {
@@ -38,6 +38,7 @@ class DatabaseProvider {
         ' location TEXT);');
     await db.execute('CREATE TABLE Helper ('
         ' id INTEGER PRIMARY KEY autoincrement,'
+        ' name TEXT,'
         ' description TEXT);');
     await db.execute('CREATE TABLE Place_Helper ('
         ' id_place INTEGER'
